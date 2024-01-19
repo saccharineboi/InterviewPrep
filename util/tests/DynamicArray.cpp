@@ -13,7 +13,7 @@ int main()
     std::uniform_int_distribution<int> dist(10, 20);
 
     {
-        DynamicArray da;
+        DynamicArray<std::int32_t> da;
         if (da.Size() == 0 && da.Capacity() == 8)
             std::cout << "[OK]";
         else
@@ -22,7 +22,7 @@ int main()
     }
 
     {
-        DynamicArray da(10);
+        DynamicArray<std::int32_t> da(10);
         if (da.Size() == 10 && da.Capacity() == 16)
             std::cout << "[OK]";
         else
@@ -33,7 +33,7 @@ int main()
     {
         bool errored{};
 
-        DynamicArray da(3, 5);
+        DynamicArray<std::int32_t> da(3, 5);
         for (int x : da) {
             if (x != 5) {
                 std::cout << "[ERROR]";

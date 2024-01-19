@@ -28,7 +28,15 @@ make test
 ## Data Structures Implemented
 
 - [x] Dynamic Array
-- [ ] Templated Dynamic Array
+- [x] Templated Dynamic Array
+- [ ] Linked List
+- [ ] Templated Linked List
+- [ ] Doubly Linked List
+- [ ] Templated Doubly Linked List
+
+## Algorithms Implemented
+
+- [ ] Tortoise and Hare
 
 ## License
 

@@ -7,12 +7,14 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 
 ////////////////////////////////////////
+template <typename T>
 struct DynamicArray
 {
 private:
-    int* mData;
+    T* mData;
     std::size_t mSize;
     std::size_t mCapacity;
 
@@ -28,12 +30,12 @@ public:
     std::size_t Capacity() const { return mCapacity; }
 
     ////////////////////////////////////////
-    int* begin() { return &mData[0]; }
-    const int* cbegin() const { return &mData[0]; }
+    T* begin() { return &mData[0]; }
+    const T* cbegin() const { return &mData[0]; }
 
     ////////////////////////////////////////
-    int* end() { return &mData[mSize]; }
-    const int* cend() const { return &mData[mSize]; }
+    T* end() { return &mData[mSize]; }
+    const T* cend() const { return &mData[mSize]; }
 
     ////////////////////////////////////////
     int operator[](std::size_t i) const { return mData[i]; }
@@ -50,7 +52,7 @@ public:
     }
 
     ////////////////////////////////////////
-    DynamicArray& push_back(int value)
+    DynamicArray& push_back(const T& value)
     {
         if (mSize < mCapacity) {
             mData[mSize] = value;
@@ -59,9 +61,9 @@ public:
         else {
             std::size_t newCapacity{ findNextPowerOfTwo(mCapacity) };
 
-            int* newData = new int[newCapacity];
+            T* newData = new T[newCapacity];
             for (std::size_t i = 0; i < mSize; ++i) {
-                newData[i] = mData[i];
+                newData[i] = std::move(mData[i]);
             }
             newData[mSize] = value;
             ++mSize;
@@ -73,10 +75,33 @@ public:
     }
 
     ////////////////////////////////////////
-    int pop_back()
+    DynamicArray& push_back(T&& value)
+    {
+        if (mSize < mCapacity) {
+            mData[mSize] = std::move(value);
+            ++mSize;
+        }
+        else {
+            std::size_t newCapacity{ findNextPowerOfTwo(mCapacity) };
+
+            T* newData = new T[newCapacity];
+            for (std::size_t i = 0; i < mSize; ++i) {
+                newData[i] = std::move(mData[i]);
+            }
+            newData[mSize] = std::move(value);
+            ++mSize;
+            mCapacity = newCapacity;
+            delete[] mData;
+            mData = newData;
+        }
+        return *this;
+    }
+
+    ////////////////////////////////////////
+    T pop_back()
     {
         if (mSize > 0) {
-            int value = mData[mSize - 1];
+            T value = std::move(mData[mSize - 1]);
             --mSize;
             return value;
         }
@@ -84,11 +109,11 @@ public:
     }
 
     ////////////////////////////////////////
-    DynamicArray& push_front(int value)
+    DynamicArray& push_front(const T& value)
     {
         if (mSize < mCapacity) {
             for (std::size_t i = mSize; i > 0; --i) {
-                mData[i] = mData[i - 1];
+                mData[i] = std::move(mData[i - 1]);
             }
             mData[0] = value;
             ++mSize;
@@ -96,10 +121,10 @@ public:
         else {
             std::size_t newCapacity{ findNextPowerOfTwo(mCapacity) };
 
-            int* newData = new int[newCapacity];
+            T* newData = new T[newCapacity];
             newData[0] = value;
             for (std::size_t i = 0; i < mSize; ++i) {
-                newData[i + 1] = mData[i];
+                newData[i + 1] = std::move(mData[i]);
             }
             ++mSize;
             mCapacity = newCapacity;
@@ -110,12 +135,38 @@ public:
     }
 
     ////////////////////////////////////////
-    int pop_front()
+    DynamicArray& push_front(T&& value)
+    {
+        if (mSize < mCapacity) {
+            for (std::size_t i = mSize; i > 0; --i) {
+                mData[i] = std::move(mData[i - 1]);
+            }
+            mData[0] = std::move(value);
+            ++mSize;
+        }
+        else {
+            std::size_t newCapacity{ findNextPowerOfTwo(mCapacity) };
+
+            T* newData = new T[newCapacity];
+            newData[0] = std::move(value);
+            for (std::size_t i = 0; i < mSize; ++i) {
+                newData[i + 1] = std::move(mData[i]);
+            }
+            ++mSize;
+            mCapacity = newCapacity;
+            delete[] mData;
+            mData = newData;
+        }
+        return *this;
+    }
+
+    ////////////////////////////////////////
+    T pop_front()
     {
         if (mSize > 0) {
-            int value = mData[0];
+            T value = std::move(mData[0]);
             for (std::size_t i = 1; i < mSize; ++i) {
-                mData[i - 1] = mData[i];
+                mData[i - 1] = std::move(mData[i]);
             }
             --mSize;
             return value;
@@ -127,24 +178,34 @@ public:
     DynamicArray()
         : mData{}, mSize{}, mCapacity{findNextPowerOfTwo(0)}
     {
-        mData = new int[mCapacity];
+        mData = new T[mCapacity];
     }
 
     ////////////////////////////////////////
     explicit DynamicArray(std::size_t size)
         : mData{}, mSize{size}, mCapacity{findNextPowerOfTwo(size)}
     {
-        mData = new int[mCapacity];
+        mData = new T[mCapacity];
         for (std::size_t i = 0; i < mSize; ++i) {
             mData[i] = {};
         }
     }
 
     ////////////////////////////////////////
-    DynamicArray(std::size_t size, int value)
+    DynamicArray(std::size_t size, const T& value)
         : mData{}, mSize{size}, mCapacity{findNextPowerOfTwo(size)}
     {
-        mData = new int[mCapacity];
+        mData = new T[mCapacity];
+        for (std::size_t i = 0; i < mSize; ++i) {
+            mData[i] = value;
+        }
+    }
+
+    ////////////////////////////////////////
+    DynamicArray(std::size_t size, T&& value)
+        : mData{}, mSize{size}, mCapacity{findNextPowerOfTwo(size)}
+    {
+        mData = new T[mCapacity];
         for (std::size_t i = 0; i < mSize; ++i) {
             mData[i] = value;
         }
@@ -161,7 +222,7 @@ public:
     DynamicArray(const DynamicArray& other)
         : mData{}, mSize{other.mSize}, mCapacity{other.mCapacity}
     {
-        mData = new int[mCapacity];
+        mData = new T[mCapacity];
         for (std::size_t i = 0; i < mSize; ++i) {
             mData[i] = other.mData[i];
         }
@@ -176,7 +237,7 @@ public:
             mSize = other.mSize;
             mCapacity = other.mCapacity;
 
-            mData = new int[mCapacity];
+            mData = new T[mCapacity];
 
             for (std::size_t i = 0; i < mSize; ++i) {
                 mData[i] = other.mData[i];

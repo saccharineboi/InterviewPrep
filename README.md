@@ -2,15 +2,16 @@
 
 My solutions to the interview questions from the [Cracking the Coding Interview](https://www.crackingthecodinginterview.com/) book, and also from other places like LeetCode.
 
-## Questions from the [Cracking the Coding Interview](https://www.crackingthecodinginterview.com/)
-
 ## Build
 
 ```
 git clone https://github.com/saccharineboi/InterviewPrep
 cd InterviewPrep
 make
+make test
 ```
+
+## Questions from the [Cracking the Coding Interview](https://www.crackingthecodinginterview.com/)
 
 ### Chapter 1
 

@@ -4,6 +4,14 @@ My solutions to the interview questions from the [Cracking the Coding Interview]
 
 ## Questions from the [Cracking the Coding Interview](https://www.crackingthecodinginterview.com/)
 
+## Build
+
+```
+git clone https://github.com/saccharineboi/InterviewPrep
+cd InterviewPrep
+make
+```
+
 ### Chapter 1
 
 - [x] 1.1 Is Unique

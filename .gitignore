@@ -1,0 +1,7 @@
+# backup files
+*~
+.*~
+*swp
+
+# executables
+a.out

@@ -1,5 +1,3 @@
-// dynamic array
-
 #pragma once
 
 #include <cstdint>
@@ -49,6 +47,12 @@ public:
             if (mData[i] != other.mData[i])
                 return false;
         return true;
+    }
+
+    ////////////////////////////////////////
+    bool operator!=(const DynamicArray& other) const
+    {
+        return !(*this == other);
     }
 
     ////////////////////////////////////////

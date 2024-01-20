@@ -36,6 +36,4 @@ int main(int argc, char** argv)
     else {
         std::cout << "Usage: " << argv[0] << " <string> <string>\n";
     }
-
-    return 0;
 }

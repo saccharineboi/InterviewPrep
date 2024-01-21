@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstdio>
 
 ////////////////////////////////////////
 struct Node
@@ -40,6 +41,7 @@ public:
     LinkedList(const LinkedList& other);
     LinkedList& operator=(const LinkedList& other);
 
+    ////////////////////////////////////////
     LinkedList(LinkedList&& other);
     LinkedList& operator=(LinkedList&& other);
 
@@ -86,6 +88,9 @@ public:
         Node* node{ mHead };
         mHead = mHead->next;
         --mSize;
+        if (!mSize) {
+            mHead = nullptr;
+        }
         return node;
     }
 
@@ -96,8 +101,25 @@ public:
             return nullptr;
         }
         Node* node{ mHead };
-        while (node) {
+        Node* prevNode{ mHead };
+        while (node->next) {
+            prevNode = node;
             node = node->next;
+        }
+        --mSize;
+        if (prevNode == node) {
+            mHead = nullptr;
+            return prevNode;
+        }
+        prevNode->next = nullptr;
+        return node;
+    }
+
+    ////////////////////////////////////////
+    void print() const
+    {
+        for (Node* node{ mHead }; node; node = node->next) {
+            std::printf("[%p : %d] -> %p\n", node, node->value, node->next);
         }
     }
 };

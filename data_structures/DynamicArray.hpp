@@ -24,8 +24,8 @@ private:
 
 public:
     ////////////////////////////////////////
-    std::size_t Size() const { return mSize; }
-    std::size_t Capacity() const { return mCapacity; }
+    std::size_t size() const { return mSize; }
+    std::size_t capacity() const { return mCapacity; }
 
     ////////////////////////////////////////
     T* begin() { return &mData[0]; }

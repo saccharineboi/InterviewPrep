@@ -7,7 +7,7 @@ void fillMatrix(int* matrix, int rowCount, int colCount)
 {
     assert(nullptr != matrix && rowCount > 0 && colCount > 0);
     std::random_device rd;
-    std::uniform_int_distribution<int> dist(0, 9);
+    std::uniform_int_distribution<int> dist(-9, 9);
     for (int row = 0; row < rowCount; ++row) {
         for (int col = 0; col < colCount; ++col) {
             matrix[row * colCount + col] = dist(rd);

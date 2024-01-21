@@ -22,6 +22,7 @@ bool isSubstring(const std::string& s1, const std::string& s2)
 ////////////////////////////////////////
 bool isRotationOf(const std::string& s1, const std::string& s2)
 {
+    // Time: O(n^2), Space: O(n)
     return s1.size() == s2.size() && isSubstring(s1, s2 + s2);
 }
 

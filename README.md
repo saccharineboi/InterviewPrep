@@ -21,9 +21,9 @@ make test
 - [x] 1.4 Palindrome Permutation
 - [x] 1.5 One Away
 - [x] 1.6 String Compression
-- [ ] 1.7 Rotate Matrix
-- [ ] 1.8 Zero Matrix
-- [ ] 1.9 String Rotation
+- [x] 1.7 Rotate Matrix
+- [x] 1.8 Zero Matrix
+- [x] 1.9 String Rotation
 
 ## Data Structures Implemented
 

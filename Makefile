@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -Og -g
+CXXFLAGS = -std=c++20 -Wall -Wextra -g
 
 SRCS = $(wildcard chapter_1/*.cpp)
 TEST_SRCS = $(wildcard data_structures/tests/*.cpp)

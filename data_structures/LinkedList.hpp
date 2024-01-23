@@ -2,19 +2,23 @@
 
 #include <cstdint>
 #include <cstdio>
+#include <memory>
+#include <iostream>
 
 ////////////////////////////////////////
+template <typename T>
 struct Node
 {
-    int value;
+    T value;
     Node* next;
 };
 
 ////////////////////////////////////////
+template <typename T>
 struct LinkedList
 {
 private:
-    Node* mHead;
+    Node<T>* mHead;
     std::size_t mSize;
 
 public:
@@ -27,9 +31,9 @@ public:
     ////////////////////////////////////////
     ~LinkedList()
     {
-        Node* node{ mHead };
+        Node<T>* node{ mHead };
         while (node) {
-            Node* next{ node->next };
+            Node<T>* next{ node->next };
             delete node;
             node = next;
         }
@@ -38,22 +42,93 @@ public:
     }
 
     ////////////////////////////////////////
-    LinkedList(const LinkedList& other);
-    LinkedList& operator=(const LinkedList& other);
+    LinkedList(const LinkedList& other)
+        : mHead{}, mSize{other.mSize}
+    {
+        if (mSize > 0) {
+            mHead = new Node<T>{ .value{ other.mHead->value },
+                                 .next{ other.mHead->next } };
+            mSize = 1;
+
+            Node<T>* node{ mHead };
+            while (node->next) {
+                Node<T>* nextNode{ node->next };
+                Node<T>* newNode{ new Node<T>{ .value{ nextNode->value },
+                                               .next{ nextNode->next }  } };
+                node->next = newNode;
+                node = nextNode;
+                ++mSize;
+            }
+        }
+    }
 
     ////////////////////////////////////////
-    LinkedList(LinkedList&& other);
-    LinkedList& operator=(LinkedList&& other);
+    LinkedList& operator=(const LinkedList& other)
+    {
+        if (this != &other) {
+            Node<T>* node{ mHead };
+            while (node) {
+                Node<T>* nextNode{ node->next };
+                delete node;
+                node = nextNode;
+            }
+            mHead = nullptr;
+
+            mSize = other.mSize;
+            if (mSize > 0) {
+                mHead = new Node<T>{ .value{ other.mHead->value },
+                                     .next{ other.mHead->next } };
+                mSize = 1;
+
+                Node<T>* node{ mHead };
+                while (node->next) {
+                    Node<T>* nextNode{ node->next };
+                    Node<T>* newNode{ new Node<T>{ .value{ nextNode->value },
+                                                   .next{ nextNode->next } } };
+                    node->next = newNode;
+                    node = nextNode;
+                    ++mSize;
+                }
+            }
+        }
+        return *this;
+    }
 
     ////////////////////////////////////////
-    void push_front(int value)
+    LinkedList(LinkedList&& other)
+        : mHead{other.mHead}, mSize{other.mSize}
+    {
+        other.mHead = nullptr;
+        other.mSize = 0;
+    }
+
+    ////////////////////////////////////////
+    LinkedList& operator=(LinkedList&& other)
+    {
+        if (this != &other) {
+            Node<T>* node{ mHead };
+            while (node) {
+                Node<T>* nextNode{ node->next };
+                delete node;
+                node = nextNode;
+            }
+            mHead = other.mHead;
+            mSize = other.mSize;
+            other.mHead = nullptr;
+            other.mSize = 0;
+        }
+        return *this;
+    }
+
+    ////////////////////////////////////////
+    void push_front(const T& value)
     {
         if (!mHead) {
-            mHead = new Node{ .value = value,
-                              .next = nullptr };
+            mHead = new Node<T>{ .value{ value },
+                                 .next{ nullptr } };
         }
         else {
-            Node* newNode{ new Node };
+            Node<T>* newNode{ new Node<T> };
             newNode->value = value;
             newNode->next = mHead;
             mHead = newNode;
@@ -62,30 +137,64 @@ public:
     }
 
     ////////////////////////////////////////
-    void push_back(int value)
+    void push_front(T&& value)
     {
         if (!mHead) {
-            mHead = new Node{ .value = value,
-                              .next = nullptr };
+            mHead = new Node<T>{ .value{ std::move(value) },
+                                 .next{ nullptr } };
         }
         else {
-            Node* node{ mHead };
-            while (node->next) {
-                node = node->next;
-            }
-            node->next = new Node{ .value = value,
-                                   .next = nullptr };
+            Node<T>* newNode{ new Node<T> };
+            newNode->value = std::move(value);
+            newNode->next = mHead;
+            mHead = newNode;
         }
         ++mSize;
     }
 
     ////////////////////////////////////////
-    Node* pop_front()
+    void push_back(const T& value)
+    {
+        if (!mHead) {
+            mHead = new Node<T>{ .value{ value },
+                                 .next{ nullptr } };
+        }
+        else {
+            Node<T>* node{ mHead };
+            while (node->next) {
+                node = node->next;
+            }
+            node->next = new Node<T>{ .value{ value },
+                                      .next{ nullptr } };
+        }
+        ++mSize;
+    }
+
+    ////////////////////////////////////////
+    void push_back(T&& value)
+    {
+        if (!mHead) {
+            mHead = new Node<T>{ .value{ std::move(value) },
+                                 .next{ nullptr } };
+        }
+        else {
+            Node<T>* node{ mHead };
+            while (node->next) {
+                node = node->next;
+            }
+            node->next = new Node<T>{ .value{ std::move(value) },
+                                      .next{ nullptr } };
+        }
+        ++mSize;
+    }
+
+    ////////////////////////////////////////
+    Node<T>* pop_front()
     {
         if (!mHead) {
             return nullptr;
         }
-        Node* node{ mHead };
+        Node<T>* node{ mHead };
         mHead = mHead->next;
         --mSize;
         if (!mSize) {
@@ -95,13 +204,13 @@ public:
     }
 
     ////////////////////////////////////////
-    Node* pop_back()
+    Node<T>* pop_back()
     {
         if (!mHead) {
             return nullptr;
         }
-        Node* node{ mHead };
-        Node* prevNode{ mHead };
+        Node<T>* node{ mHead };
+        Node<T>* prevNode{ mHead };
         while (node->next) {
             prevNode = node;
             node = node->next;
@@ -118,8 +227,35 @@ public:
     ////////////////////////////////////////
     void print() const
     {
-        for (Node* node{ mHead }; node; node = node->next) {
-            std::printf("[%p : %d] -> %p\n", node, node->value, node->next);
+        if (!mSize) {
+            std::cout << "LinkedList is empty\n";
         }
+        for (Node<T>* node{ mHead }; node; node = node->next) {
+            std::cout << (node->value) << " -> " << node->next << "\n";
+        }
+    }
+
+    ////////////////////////////////////////
+    bool operator==(const LinkedList& other)
+    {
+        if (mSize != other.mSize) {
+            return false;
+        }
+        Node<T>* ourNode{ mHead };
+        Node<T>* otherNode{ other.mHead };
+        while (ourNode) {
+            if (ourNode->value != otherNode->value) {
+                return false;
+            }
+            ourNode = ourNode->next;
+            otherNode = otherNode->next;
+        }
+        return true;
+    }
+
+    ////////////////////////////////////////
+    bool operator!=(const LinkedList& other)
+    {
+        return !(*this == other);
     }
 };

@@ -42,7 +42,7 @@ make test
 - [x] Dynamic Array
 - [x] Templated Dynamic Array
 - [x] Linked List
-- [ ] Templated Linked List
+- [x] Templated Linked List
 - [ ] Doubly Linked List
 - [ ] Templated Doubly Linked List
 

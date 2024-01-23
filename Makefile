@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++20 -Wall -Wextra -g
 
-SRCS = $(wildcard chapter_1/*.cpp)
+SRCS = $(wildcard chapter_1/*.cpp chapter_2/*.cpp)
 TEST_SRCS = $(wildcard data_structures/tests/*.cpp)
 
 all: $(SRCS:.cpp=.out)

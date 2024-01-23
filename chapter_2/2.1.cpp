@@ -7,8 +7,8 @@
 ////////////////////////////////////////
 void removeDupsWithBucket(std::list<std::string>& lst)
 {
-    // Time: O(n)
-    // Space: O(n)
+    // Time: O(n * m) where m = length of longest string
+    // Space: O(n * m)
     std::unordered_set<std::string> bucket;
     for (auto it{ lst.begin() }; it != lst.end();) {
         if (bucket.find(it->data()) == bucket.end()) {
@@ -26,7 +26,7 @@ void removeDupsWithBucket(std::list<std::string>& lst)
 ////////////////////////////////////////
 void removeDupsWithoutBucket(std::list<std::string>& lst)
 {
-    // Time: O(n * log n)
+    // Time: O(n * log n + n * m) where m = length of longest string
     // Space: O(1)
     lst.sort();
     for (auto it{ lst.begin() }; it != lst.end();) {

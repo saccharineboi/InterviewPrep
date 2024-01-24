@@ -34,8 +34,16 @@ make test
 - [x] 2.5 Sum Lists
 - [x] 2.6 Palindrome
 - [x] 2.7 Intersection
-- [ ] 2.8 Loop Detection
--
+- [x] 2.8 Loop Detection
+
+### Chapter 3: Stacks and Queues
+
+- [ ] 3.1 Three in One
+- [ ] 3.2 Stack Min
+- [ ] 3.3 Stack of Plates
+- [ ] 3.4 Queue via Stacks
+- [ ] 3.5 Sort Stack
+- [ ] 3.6 Animal Shelter
 
 ## Data Structures Implemented
 
@@ -48,7 +56,7 @@ make test
 
 ## Algorithms Implemented
 
-- [ ] Tortoise and Hare
+- [x] Tortoise and Hare
 
 ## License
 

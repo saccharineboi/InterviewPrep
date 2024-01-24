@@ -33,7 +33,7 @@ make test
 - [x] 2.4 Partition
 - [x] 2.5 Sum Lists
 - [x] 2.6 Palindrome
-- [ ] 2.7 Intersection
+- [x] 2.7 Intersection
 - [ ] 2.8 Loop Detection
 -
 

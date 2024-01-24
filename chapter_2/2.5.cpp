@@ -54,6 +54,39 @@ std::list<int> reverseSum(const std::list<int>& lstA, const std::list<int>& lstB
 }
 
 ////////////////////////////////////////
+std::list<int> reverseSumWithoutConversion(const std::list<int>& lstA, const std::list<int>& lstB)
+{
+    auto lstAIt{ lstA.begin() };
+    auto lstBIt{ lstB.begin() };
+
+    std::list<int> result;
+
+    int carry{};
+    while (lstAIt != lstA.end() || lstBIt != lstB.end()) {
+        if (lstAIt == lstA.end()) {
+            result.push_front(carry + *lstBIt);
+            ++lstBIt;
+        }
+        else if (lstBIt == lstB.end()) {
+            result.push_front(carry + *lstAIt);
+            ++lstAIt;
+        }
+        else {
+            int sum{ carry + *lstAIt + *lstBIt };
+            result.push_front(sum % 10);
+            carry = sum / 10;
+            ++lstAIt;
+            ++lstBIt;
+        }
+    }
+    if (carry > 0) {
+        result.push_front(carry);
+    }
+    result.reverse();
+    return result;
+}
+
+////////////////////////////////////////
 std::list<int> forwardSum(const std::list<int>& lstA, const std::list<int>& lstB)
 {
     int lstANum{}, lstBNum{};
@@ -81,6 +114,44 @@ std::list<int> forwardSum(const std::list<int>& lstA, const std::list<int>& lstB
 }
 
 ////////////////////////////////////////
+std::list<int> forwardSumWithoutConversion(const std::list<int>& lstA, const std::list<int>& lstB)
+{
+    auto lstAIt{ lstA.begin() };
+    auto lstBIt{ lstB.begin() };
+
+    int expA{ static_cast<int>(std::pow(10, lstA.size() - 1)) };
+    int expB{ static_cast<int>(std::pow(10, lstB.size() - 1)) };
+
+    std::list<int> result;
+
+    int carry{};
+    while (lstAIt != lstA.end() || lstBIt != lstB.end()) {
+        if (lstAIt == lstA.end()) {
+            result.push_front(carry + *lstBIt * expB);
+            ++lstBIt;
+            expB /= 10;
+        }
+        else if (lstBIt == lstB.end()) {
+            result.push_front(carry + *lstAIt * expA);
+            ++lstAIt;
+            expA /= 10;
+        }
+        else {
+            int sum{ carry + *lstAIt + *lstBIt };
+            result.push_front(sum % 10);
+            carry = sum / 10;
+            ++lstAIt;
+            ++lstBIt;
+        }
+    }
+    if (carry > 0) {
+        result.push_front(carry);
+    }
+    result.reverse();
+    return result;
+}
+
+////////////////////////////////////////
 int main(int argc, char** argv)
 {
     if (argc > 2) {
@@ -96,12 +167,14 @@ int main(int argc, char** argv)
             std::cout << " + ";
             std::cout << '(' << listB << ')';
             std::cout << " = [reverse sum] ";
-            std::cout << '(' << reverseSum(listA, listB) << ")\n";
+            std::cout << '(' << reverseSum(listA, listB) << ") [reverse sum without conversion] ";
+            std::cout << '(' << reverseSumWithoutConversion(listA, listB) << ")\n";
             std::cout << '(' << listA << ')';
             std::cout << " + ";
             std::cout << '(' << listB << ')';
             std::cout << " = [forward sum] ";
-            std::cout << '(' << forwardSum(listA, listB) << ")\n";
+            std::cout << '(' << forwardSum(listA, listB) << ") [forward sum without conversion] ";
+            std::cout << '(' << forwardSumWithoutConversion(listA, listB) << ")\n";
         }
     }
     else {

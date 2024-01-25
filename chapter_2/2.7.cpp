@@ -65,6 +65,30 @@ Node* find_intersection(const SinglyLinkedList& lstA,
 }
 
 ////////////////////////////////////////
+Node* find_intersection_wo_bucket(const SinglyLinkedList& lstA,
+                                  const SinglyLinkedList& lstB)
+{
+    Node* aNode{ lstA.head };
+    Node* bNode{ lstB.head };
+    Node* current{ aNode };
+
+    while (current) {
+        if (aNode && bNode && aNode == bNode) {
+            return aNode;
+        }
+        if (current == aNode) {
+            current = bNode;        
+            aNode = aNode->next;
+        }
+        else if (current == bNode) {
+            current = aNode;
+            bNode = bNode->next;
+        }
+    }
+    return nullptr;
+}
+
+////////////////////////////////////////
 int main()
 {
     {
@@ -88,7 +112,8 @@ int main()
         std::printf("List B:\n");
         lstB.print();
 
-        std::printf("Intersecting node is %p\n\n", find_intersection(lstA, lstB));
+        std::printf("Intersecting node is %p\n", find_intersection(lstA, lstB));
+        std::printf("[wo bucket] Intersecting node is %p\n\n", find_intersection_wo_bucket(lstA, lstB));
     }
 
     {
@@ -112,7 +137,8 @@ int main()
         std::printf("List B:\n");
         lstB.print();
 
-        std::printf("Intersecting node is %p\n\n", find_intersection(lstA, lstB));
+        std::printf("Intersecting node is %p\n", find_intersection(lstA, lstB));
+        std::printf("[wo bucket] Intersecting node is %p\n\n", find_intersection_wo_bucket(lstA, lstB));
     }
 
     {
@@ -136,7 +162,8 @@ int main()
         std::printf("List B:\n");
         lstB.print();
 
-        std::printf("Intersecting node is %p\n\n", find_intersection(lstA, lstB));
+        std::printf("Intersecting node is %p\n", find_intersection(lstA, lstB));
+        std::printf("[wo bucket] Intersecting node is %p\n\n", find_intersection_wo_bucket(lstA, lstB));
     }
 
     {
@@ -160,7 +187,8 @@ int main()
         std::printf("List B:\n");
         lstB.print();
 
-        std::printf("Intersecting node is %p\n\n", find_intersection(lstA, lstB));
+        std::printf("Intersecting node is %p\n", find_intersection(lstA, lstB));
+        std::printf("[wo bucket] Intersecting node is %p\n\n", find_intersection_wo_bucket(lstA, lstB));
     }
 
     {
@@ -184,6 +212,7 @@ int main()
         std::printf("List B:\n");
         lstB.print();
 
-        std::printf("Intersecting node is %p\n\n", find_intersection(lstA, lstB));
+        std::printf("Intersecting node is %p\n", find_intersection(lstA, lstB));
+        std::printf("[wo bucket] Intersecting node is %p\n\n", find_intersection_wo_bucket(lstA, lstB));
     }
 }

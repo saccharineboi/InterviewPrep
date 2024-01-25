@@ -7,23 +7,24 @@
 
 ////////////////////////////////////////
 template <typename T>
-struct Node
+struct DoublyNode
 {
     T value;
-    Node* next;
+    DoublyNode* next;
+    DoublyNode* prev;
 };
 
 ////////////////////////////////////////
 template <typename T>
-struct LinkedList
+struct DoublyLinkedList
 {
 private:
-    Node<T>* mHead;
+    DoublyNode<T>* mHead;
     std::size_t mSize;
 
 public:
     ////////////////////////////////////////
-    LinkedList() : mHead{}, mSize{} {}
+    DoublyLinkedList() : mHead{}, mSize{} {}
 
     ////////////////////////////////////////
     std::size_t size() const { return mSize; }
@@ -31,9 +32,9 @@ public:
     ////////////////////////////////////////
     void clear()
     {
-        Node<T>* node{ mHead };
+        DoublyNode<T>* node{ mHead };
         while (node) {
-            Node<T>* next{ node->next };
+            DoublyNode<T>* next{ node->next };
             delete node;
             node = next;
         }
@@ -42,26 +43,32 @@ public:
     }
 
     ////////////////////////////////////////
-    ~LinkedList()
+    ~DoublyLinkedList()
     {
         clear();
     }
 
     ////////////////////////////////////////
-    LinkedList(const LinkedList& other)
+    DoublyLinkedList(const DoublyLinkedList& other)
         : mHead{}, mSize{}
     {
         if (other.mSize > 0) {
-            mHead = new Node<T>{ .value{ other.mHead->value },
-                                 .next{ other.mHead->next } };
+            mHead = new DoublyNode<T>{ .value{ other.mHead->value },
+                                       .next{ other.mHead->next },
+                                       .prev{ other.mHead->prev } };
             mSize = 1;
 
-            Node<T>* node{ mHead };
+            DoublyNode<T>* node{ mHead };
+            DoublyNode<T>* prev{ mHead->prev };
+
             while (mSize < other.mSize && node->next) {
-                Node<T>* nextNode{ node->next };
-                Node<T>* newNode{ new Node<T>{ .value{ nextNode->value },
-                                               .next{ nextNode->next }  } };
+                DoublyNode<T>* nextNode{ node->next };
+                DoublyNode<T>* newNode{ new DoublyNode<T>{ .value{ nextNode->value },
+                                                           .next{ nextNode->next },
+                                                           .prev{ prev } } };
                 node->next = newNode;
+                node->prev = prev;
+                prev = node;
                 node = nextNode;
                 ++mSize;
             }
@@ -69,22 +76,27 @@ public:
     }
 
     ////////////////////////////////////////
-    LinkedList& operator=(const LinkedList& other)
+    DoublyLinkedList& operator=(const DoublyLinkedList& other)
     {
         if (this != &other) {
             clear();
 
             if (other.mSize > 0) {
-                mHead = new Node<T>{ .value{ other.mHead->value },
-                                     .next{ other.mHead->next } };
+                mHead = new DoublyNode<T>{ .value{ other.mHead->value },
+                                           .next{ other.mHead->next },
+                                           .prev{ other.mHead->prev } };
                 mSize = 1;
 
-                Node<T>* node{ mHead };
+                DoublyNode<T>* node{ mHead };
+                DoublyNode<T>* prev{ mHead->prev };
                 while (mSize < other.mSize && node->next) {
-                    Node<T>* nextNode{ node->next };
-                    Node<T>* newNode{ new Node<T>{ .value{ nextNode->value },
-                                                   .next{ nextNode->next } } };
+                    DoublyNode<T>* nextNode{ node->next };
+                    DoublyNode<T>* newNode{ new DoublyNode<T>{ .value{ nextNode->value },
+                                                               .next{ nextNode->next },
+                                                               .prev{ nextNode->prev } } };
                     node->next = newNode;
+                    node->prev = prev;
+                    prev = node;
                     node = nextNode;
                     ++mSize;
                 }
@@ -94,7 +106,7 @@ public:
     }
 
     ////////////////////////////////////////
-    LinkedList(LinkedList&& other)
+    DoublyLinkedList(DoublyLinkedList&& other)
         : mHead{other.mHead}, mSize{other.mSize}
     {
         other.mHead = nullptr;
@@ -102,7 +114,7 @@ public:
     }
 
     ////////////////////////////////////////
-    LinkedList& operator=(LinkedList&& other)
+    DoublyLinkedList& operator=(DoublyLinkedList&& other)
     {
         if (this != &other) {
             clear();
@@ -118,13 +130,14 @@ public:
     void push_front(const T& value)
     {
         if (!mHead) {
-            mHead = new Node<T>{ .value{ value },
-                                 .next{ nullptr } };
+            mHead = new DoublyNode<T>{ .value{ value },
+                                       .next{ nullptr },
+                                       .prev{ nullptr } };
         }
         else {
-            Node<T>* newNode{ new Node<T> };
-            newNode->value = value;
-            newNode->next = mHead;
+            DoublyNode<T>* newNode{ new DoublyNode<T>{ .value{value},
+                                                       .next{ mHead },
+                                                       .prev{ nullptr } } };
             mHead = newNode;
         }
         ++mSize;
@@ -134,13 +147,14 @@ public:
     void push_front(T&& value)
     {
         if (!mHead) {
-            mHead = new Node<T>{ .value{ std::move(value) },
-                                 .next{ nullptr } };
+            mHead = new DoublyNode<T>{ .value{ std::move(value) },
+                                       .next{ nullptr },
+                                       .prev{ nullptr } };
         }
         else {
-            Node<T>* newNode{ new Node<T> };
-            newNode->value = std::move(value);
-            newNode->next = mHead;
+            DoublyNode<T>* newNode{ new DoublyNode<T>{ .value{ std::move(value) },
+                                                       .next{ mHead },
+                                                       .prev{ nullptr } } };
             mHead = newNode;
         }
         ++mSize;
@@ -150,16 +164,20 @@ public:
     void push_back(const T& value)
     {
         if (!mHead) {
-            mHead = new Node<T>{ .value{ value },
-                                 .next{ nullptr } };
+            mHead = new DoublyNode<T>{ .value{ value },
+                                       .next{ nullptr },
+                                       .prev{ nullptr } };
         }
         else {
-            Node<T>* node{ mHead };
+            DoublyNode<T>* node{ mHead };
+            DoublyNode<T>* prev{};
             while (node->next) {
+                prev = node;
                 node = node->next;
             }
-            node->next = new Node<T>{ .value{ value },
-                                      .next{ nullptr } };
+            node->next = new DoublyNode<T>{ .value{ value },
+                                            .next{ nullptr },
+                                            .prev{ prev } };
         }
         ++mSize;
     }
@@ -168,27 +186,32 @@ public:
     void push_back(T&& value)
     {
         if (!mHead) {
-            mHead = new Node<T>{ .value{ std::move(value) },
-                                 .next{ nullptr } };
+            mHead = new DoublyNode<T>{ .value{ std::move(value) },
+                                       .next{ nullptr },
+                                       .prev{ nullptr } };
         }
         else {
-            Node<T>* node{ mHead };
+            DoublyNode<T>* node{ mHead };
+            DoublyNode<T>* prev{};
             while (node->next) {
+                prev = node;
                 node = node->next;
             }
-            node->next = new Node<T>{ .value{ std::move(value) },
-                                      .next{ nullptr } };
+            node->next = new DoublyNode<T>{ .value{ std::move(value) },
+                                            .next{ nullptr },
+                                            .prev{ prev } };
         }
         ++mSize;
     }
 
     ////////////////////////////////////////
-    Node<T>* pop_front()
+    DoublyNode<T>* pop_front()
     {
         if (!mHead) {
             return nullptr;
         }
-        Node<T>* node{ mHead };
+        DoublyNode<T>* node{ mHead };
+        mHead->prev = nullptr;
         mHead = mHead->next;
         --mSize;
         if (!mSize) {
@@ -198,13 +221,13 @@ public:
     }
 
     ////////////////////////////////////////
-    Node<T>* pop_back()
+    DoublyNode<T>* pop_back()
     {
         if (!mHead) {
             return nullptr;
         }
-        Node<T>* node{ mHead };
-        Node<T>* prevNode{ mHead };
+        DoublyNode<T>* node{ mHead };
+        DoublyNode<T>* prevNode{ mHead };
         while (node->next) {
             prevNode = node;
             node = node->next;
@@ -222,21 +245,21 @@ public:
     void print() const
     {
         if (!mSize) {
-            std::cout << "LinkedList is empty\n";
+            std::cout << "DoublyLinkedList is empty\n";
         }
-        for (Node<T>* node{ mHead }; node; node = node->next) {
-            std::cout << (node->value) << " -> " << node->next << "\n";
+        for (DoublyNode<T>* node{ mHead }; node; node = node->next) {
+            std::cout << node->prev << " <- " << (node->value) << " -> " << node->next << "\n";
         }
     }
 
     ////////////////////////////////////////
-    bool operator==(const LinkedList& other)
+    bool operator==(const DoublyLinkedList& other)
     {
         if (mSize != other.mSize) {
             return false;
         }
-        Node<T>* ourNode{ mHead };
-        Node<T>* otherNode{ other.mHead };
+        DoublyNode<T>* ourNode{ mHead };
+        DoublyNode<T>* otherNode{ other.mHead };
         while (ourNode) {
             if (ourNode->value != otherNode->value) {
                 return false;
@@ -248,7 +271,7 @@ public:
     }
 
     ////////////////////////////////////////
-    bool operator!=(const LinkedList& other)
+    bool operator!=(const DoublyLinkedList& other)
     {
         return !(*this == other);
     }
@@ -256,11 +279,12 @@ public:
     ////////////////////////////////////////
     void reverse()
     {
-        Node<T>* prev{};
-        Node<T>* node{ mHead };
+        DoublyNode<T>* prev{};
+        DoublyNode<T>* node{ mHead };
         while (node) {
-            Node<T>* next{ node->next };
+            DoublyNode<T>* next{ node->next };
             node->next = prev;
+            node->prev = next;
             prev = node;
             node = next;
         }
@@ -270,8 +294,8 @@ public:
     ////////////////////////////////////////
     bool is_circular() const
     {
-        Node<T>* tortoise{ mHead };
-        Node<T>* hare{ mHead };
+        DoublyNode<T>* tortoise{ mHead };
+        DoublyNode<T>* hare{ mHead };
 
         while (tortoise && hare) {
             tortoise = tortoise->next;
@@ -287,9 +311,9 @@ public:
     }
 
     ////////////////////////////////////////
-    Node<T>* find(const T& value)
+    DoublyNode<T>* find(const T& value)
     {
-        for (Node<T>* node{ mHead }; node; node = node->next) {
+        for (DoublyNode<T>* node{ mHead }; node; node = node->next) {
             if (node->value == value) {
                 return node;
             }

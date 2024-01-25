@@ -51,8 +51,14 @@ make test
 - [x] Templated Dynamic Array
 - [x] Linked List
 - [x] Templated Linked List
-- [ ] Doubly Linked List
-- [ ] Templated Doubly Linked List
+- [x] Doubly Linked List
+- [x] Templated Doubly Linked List
+- [ ] Stack
+- [ ] Templated Stack
+- [ ] Queue
+- [ ] Templated Queue
+- [ ] DQueue
+- [ ] Templated DQueue
 
 ## Algorithms Implemented
 

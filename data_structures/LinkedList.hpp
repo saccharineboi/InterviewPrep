@@ -258,4 +258,18 @@ public:
     {
         return !(*this == other);
     }
+
+    ////////////////////////////////////////
+    void reverse()
+    {
+        Node<T>* prev{};
+        Node<T>* node{ mHead };
+        while (node) {
+            Node<T>* next{ node->next };
+            node->next = prev;
+            prev = node;
+            node = next;
+        }
+        mHead = prev;
+    }
 };

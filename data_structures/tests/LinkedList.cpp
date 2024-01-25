@@ -116,4 +116,16 @@ int main()
         b = std::move(a);
         TEST(b.size() == 3 && a.size() == 0 && a != b, "LinkedList move assignment");
     }
+
+    {
+        LinkedList<int> a;
+        a.push_back(1);
+        a.push_back(2);
+        a.push_back(3);
+        a.reverse();
+        bool x{ a.pop_back()->value == 1 };
+        bool y{ a.pop_back()->value == 2 };
+        bool z{ a.pop_back()->value == 3 };
+        TEST(a.size() == 0 && x && y && z, "LinkedList reverse");
+    }
 }

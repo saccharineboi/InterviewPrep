@@ -53,12 +53,12 @@ make test
 - [x] Templated Linked List
 - [x] Doubly Linked List
 - [x] Templated Doubly Linked List
-- [ ] Stack
-- [ ] Templated Stack
+- [x] Stack
+- [x] Templated Stack
 - [ ] Queue
 - [ ] Templated Queue
-- [ ] DQueue
-- [ ] Templated DQueue
+- [ ] DoubleEndedQueue
+- [ ] Templated DoubleEndedQueue
 
 ## Algorithms Implemented
 

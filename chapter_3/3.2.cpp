@@ -13,7 +13,7 @@ private:
     bool mOutputDebug;
 
 public:
-    explicit Stack(Stack<N>* minStack = nullptr, bool outputDebug = false)
+    Stack(Stack<N>* minStack = nullptr, bool outputDebug = false)
         : mSize{}, mMinStack{minStack}, mOutputDebug{outputDebug}
     {
         for (int i = 0; i < N; ++i) {

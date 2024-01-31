@@ -27,6 +27,9 @@ public:
             mArray[mSize] = value;
             ++mSize;
         }
+        else {
+            std::cerr << "stack is full\n";
+        }
     }
 
     int Pop()

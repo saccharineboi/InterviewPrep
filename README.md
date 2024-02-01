@@ -41,9 +41,24 @@ make test
 - [x] 3.1 Three in One
 - [x] 3.2 Stack Min
 - [x] 3.3 Stack of Plates
-- [ ] 3.4 Queue via Stacks
-- [ ] 3.5 Sort Stack
-- [ ] 3.6 Animal Shelter
+- [x] 3.4 Queue via Stacks
+- [x] 3.5 Sort Stack
+- [x] 3.6 Animal Shelter
+
+### Chapter 4: Trees and Graphs
+
+- [ ] 4.1 Route Between Nodes
+- [ ] 4.2 Minimal Tree
+- [ ] 4.3 List of Depths
+- [ ] 4.4 Check Balanced
+- [ ] 4.5 Validate BST
+- [ ] 4.6 Successor
+- [ ] 4.7 Build Order
+- [ ] 4.8 First Common Ancestor
+- [ ] 4.9 BST Sequences
+- [ ] 4.10 Check Subtree
+- [ ] 4.11 Random Node
+- [ ] 4.12 Paths with Sum
 
 ## Data Structures Implemented
 

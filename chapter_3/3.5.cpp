@@ -52,52 +52,14 @@ public:
 
     void Sort()
     {
-        if (!mSize) {
-            return;
-        }
         Stack<N> tempStack;
-        int numElements{}, numTempFilled{};
-
-        // count the elements
         while (!IsEmpty()) {
-            tempStack.Push(Pop());
-            ++numElements;
+            int value{ Pop() };
+            while (!tempStack.IsEmpty() && tempStack.Peek() > value) {
+                Push(tempStack.Pop());
+            }
+            tempStack.Push(value);
         }
-        while (!tempStack.IsEmpty()) {
-            Push(tempStack.Pop());
-        }
-
-        // sort
-        while (true) {
-            int smallestValue{ Peek() };
-            int numSmallestValuesFound{};
-
-            while (!IsEmpty()) {
-                int value{ Pop() };
-                if (value < smallestValue) {
-                    smallestValue = value;
-                    numSmallestValuesFound = 1;
-                }
-                else if (value == smallestValue) {
-                    ++numSmallestValuesFound;
-                }
-                tempStack.Push(value);
-            }
-            for (int i{}; !tempStack.IsEmpty() && i < numElements - numTempFilled; ++i) {
-                int value{ tempStack.Pop() };
-                if (value > smallestValue) {
-                    Push(value);
-                }
-            }
-            for (int i{}; i < numSmallestValuesFound; ++i) {
-                tempStack.Push(smallestValue);
-                ++numTempFilled;
-            }
-            if (IsEmpty()) {
-                break;
-            }
-        }
-        // refill stack
         while (!tempStack.IsEmpty()) {
             Push(tempStack.Pop());
         }

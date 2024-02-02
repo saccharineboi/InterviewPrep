@@ -105,12 +105,12 @@ int main()
 
     {
         constexpr int size{ 10 };
-        Stack<int, size> stackA, stackB;
+        Stack<int, size> stackA;
 
         for (int i{}; i < size; ++i) {
             stackA.Push(dist(rd));
         }
-        stackB = stackA;
+        Stack<int, size> stackB{ stackA };
         TEST(stackA == stackB, "Stack copy constructor");
     }
 

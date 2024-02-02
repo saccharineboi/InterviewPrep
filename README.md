@@ -70,8 +70,8 @@ make test
 - [x] Templated Doubly Linked List
 - [x] Stack
 - [x] Templated Stack
-- [ ] Queue
-- [ ] Templated Queue
+- [x] Queue
+- [x] Templated Queue
 - [ ] DoubleEndedQueue
 - [ ] Templated DoubleEndedQueue
 

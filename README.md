@@ -72,8 +72,8 @@ make test
 - [x] Templated Stack
 - [x] Queue
 - [x] Templated Queue
-- [ ] DoubleEndedQueue
-- [ ] Templated DoubleEndedQueue
+- [x] DoubleEndedQueue
+- [x] Templated DoubleEndedQueue
 
 ## Algorithms Implemented
 

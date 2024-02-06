@@ -78,6 +78,7 @@ make test
 ## Algorithms Implemented
 
 - [x] Tortoise and Hare
+- [x] Binary Search
 
 ## License
 

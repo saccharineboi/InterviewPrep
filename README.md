@@ -80,6 +80,7 @@ make test
 - [x] Tortoise and Hare
 - [x] Binary Search
 - [x] Bubble Sort
+- [x] Insertion Sort
 
 ## License
 

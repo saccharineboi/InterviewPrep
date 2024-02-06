@@ -79,6 +79,7 @@ make test
 
 - [x] Tortoise and Hare
 - [x] Binary Search
+- [x] Bubble Sort
 
 ## License
 

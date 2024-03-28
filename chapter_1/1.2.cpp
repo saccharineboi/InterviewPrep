@@ -1,35 +1,25 @@
 #include <string>
 #include <iostream>
-#include <unordered_set>
+#include <vector>
 
 ////////////////////////////////////////
 bool checkPerm(const std::string& a, const std::string& b)
 {
-    // Time: O(a)
-    // Space: O(a)
-    if (a.size() != b.size())
+    if (a.size() != b.size()) {
         return false;
-
-    std::unordered_set<char> bucketForA;
-    for (char c : a)
-        bucketForA.insert(c);
-    if (bucketForA.size() != a.size())
-        return false;
-
-    std::unordered_set<char> bucketForB;
-    for (char c : b)
-        bucketForB.insert(c);
-    if (bucketForB.size() != b.size())
-        return false;
-
-    if (bucketForA.size() == bucketForB.size()) {
-        for (char c : bucketForA) {
-            if (bucketForB.find(c) == bucketForB.end())
-                return false;
-        }
-        return true;
     }
-    return false;
+    // assume that the character set has 256 characters
+    std::vector<int> charCounts(256);
+    for (char c : a) {
+        ++charCounts[c];
+    }
+    for (char c : b) {
+        --charCounts[c];
+        if (charCounts[c] < 0) {
+            return false;
+        }
+    }
+    return true;
 }
 
 ////////////////////////////////////////

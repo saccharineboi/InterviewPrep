@@ -1,29 +1,18 @@
 #include <string>
 #include <iostream>
-#include <unordered_set>
-#include <algorithm>
+#include <vector>
 
-////////////////////////////////////////
-bool isUniqueWithDS(const std::string& str)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool isUnique(const std::string& s)
 {
-    // Time: O(N)
-    // Space: O(N)
-    std::unordered_set<char> chars;
-    for (char c : str)
-        chars.insert(c);
-    return str.size() == chars.size();
-}
-
-////////////////////////////////////////
-bool isUniqueWithoutDS(const std::string& str)
-{
-    // Time O(N * log N)
-    // Space: O(N), can be turned into O(1) if sorting is done in-place
-    std::string cpy{ str };
-    std::sort(cpy.begin(), cpy.end());
-    for (std::size_t i = 1; i < str.size(); ++i)
-        if (str[i] == str[i - 1])
+    // assume that there are 256 characters in the character set
+    std::vector<bool> chars(256);
+    for (char c : s) {
+        if (chars[c]) {
             return false;
+        }
+        chars[c] = true;
+    }
     return true;
 }
 
@@ -31,10 +20,8 @@ bool isUniqueWithoutDS(const std::string& str)
 int main(int argc, char** argv)
 {
     if (argc > 1) {
-        std::string str(argv[1]);
-        std::cout << "You entered: " << str << '\n';
-        std::cout << "Is Unique (With DS): " << isUniqueWithDS(str) << '\n';
-        std::cout << "Is Unique (Without DS): " << isUniqueWithoutDS(str) << '\n';
+        std::cout << "You entered: " << argv[1] << '\n';
+        std::cout << "Is Unique: " << isUnique(argv[1]) << '\n';
     }
     else {
         std::cout << "Usage: " << argv[0] << " <string>\n";

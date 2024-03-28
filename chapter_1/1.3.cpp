@@ -1,48 +1,50 @@
-#include <string>
 #include <iostream>
-#include <cassert>
 #include <cstring>
+#include <cctype>
 
 ////////////////////////////////////////
-#define IN_SPACE  1
-#define OUT_SPACE 0
-
-////////////////////////////////////////
-void urlify(char* str, int length)
+char* urlify(char* str, int length)
 {
-    // Time: O(n)
-    // Space: O(1)
-    assert(nullptr != str && "str cannot be NULL");
-    int state{ OUT_SPACE };
-    int i{}, j{};
-    while (i < length && str[i] == ' ')
-        ++i;
-    for (; i < length; ++i) {
-        if (str[i] == ' ') {
-            state = IN_SPACE;
-        }
-        else if (state == IN_SPACE) {
-            state = OUT_SPACE;
-            str[j++] = '%';
-            str[j++] = str[i];
+    if (!length) {
+        return str;
+    }
+    int readInd{ length - 1 };
+    int writeInd{ length - 1 };
+    while (readInd >= 0 && std::isspace(str[readInd])) {
+        --readInd;
+    }
+    int spaceCnt{};
+    while (readInd >= 0 && writeInd >= 0) {
+        if (std::isspace(str[readInd])) {
+            ++spaceCnt;
         }
         else {
-            str[j++] = str[i];
+            while (spaceCnt > 0) {
+                str[writeInd--] = '0';
+                str[writeInd--] = '2';
+                str[writeInd--] = '%';
+                --spaceCnt;
+            }
+            str[writeInd--] = str[readInd];
         }
+        --readInd;
     }
-    str[j] = '\0';
+    ++readInd;
+    ++writeInd;
+    std::swap(readInd, writeInd);
+    while (readInd < length && writeInd < length) {
+        str[writeInd++] = str[readInd++];
+    }
+    str[writeInd] = '\0';
+    return str;
 }
 
 ////////////////////////////////////////
 int main(int argc, char** argv)
 {
     if (argc > 1) {
-        std::cout << "You entered: " << argv[1] << '\n';
-
-        int length = std::strlen(argv[1]);
-        urlify(argv[1], length);
-
-        std::cout << "URLified: " << argv[1] << '\n';
+        std::cout << "You entered: '" << argv[1] << "'\n";
+        std::cout << "URLified: '" << urlify(argv[1], std::strlen(argv[1])) << "'\n";
     }
     else {
         std::cout << "Usage: " << argv[0] << " <string>\n";
